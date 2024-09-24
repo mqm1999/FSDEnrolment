@@ -25,6 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 public class Utils {
@@ -51,16 +52,7 @@ public class Utils {
         }
     }
 
-    public static List<Role> createListRole() {
-        Role student = new Role(1L, "student");
-        Role admin = new Role(2L, "admin");
-        List<Role> roleList = new ArrayList<>();
-        roleList.add(student);
-        roleList.add(admin);
-        return roleList;
-    }
-
-    public static void addInitialData(File file, List<Role> roleList) {
+    public static void addInitialData(File file, List<Role> roleList, List<Semester> semesterList) {
         /*
          * file format:
          * - role
@@ -77,7 +69,9 @@ public class Utils {
         try {
             FileWriter fw = new FileWriter(file.getPath());
             stringBuilder.append(new Gson().toJson(roleList));
-            stringBuilder.append("\n".repeat(9));
+            stringBuilder.append("\n".repeat(3));
+            stringBuilder.append(new Gson().toJson(semesterList));
+            stringBuilder.append("\n".repeat(4));
             fw.write(stringBuilder.toString());
             fw.close();
             System.out.println("Finish creating roles");
@@ -210,4 +204,26 @@ public class Utils {
             System.out.println("Error writing file");
         }
     }
+
+    public static List<Role> createListRole() {
+        Role student = new Role(1L, "student");
+        Role admin = new Role(2L, "admin");
+        List<Role> roleList = new ArrayList<>();
+        roleList.add(student);
+        roleList.add(admin);
+        return roleList;
+    }
+
+    public static List<Semester> createListSemester() {
+        List<Semester> semesterList = new ArrayList<>();
+        Semester spring2024 = new Semester(UUID.randomUUID().toString(), "Spring 2024", true);
+        Semester autumn2024 = new Semester(UUID.randomUUID().toString(), "Autumn 2024", false);
+        Semester autumn2025 = new Semester(UUID.randomUUID().toString(), "Autumn 2025", false);
+        semesterList.add(spring2024);
+        semesterList.add(autumn2024);
+        semesterList.add(autumn2025);
+        return semesterList;
+    }
+
+    public static List<>
 }

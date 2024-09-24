@@ -4,12 +4,23 @@ public class Semester {
     private String id;
     private String semesterName;
 
+    private boolean active;
+
+    public Semester(String id, String semesterName, boolean active) {
+        this.id = id;
+        this.semesterName = semesterName;
+        this.active = active;
+    }
+
     public Semester() {
     }
 
-    public Semester(String id, String semesterName) {
-        this.id = id;
-        this.semesterName = semesterName;
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public String getId() {

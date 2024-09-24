@@ -1,5 +1,6 @@
 import authen.StudentRegistration;
 import entity.Role;
+import entity.Semester;
 import util.Utils;
 
 import java.io.File;
@@ -11,10 +12,9 @@ public class Main {
     public static void main(String[] args) {
         File studentData = Utils.createFile();
         List<Role> roleList = Utils.createListRole();
-        Utils.addInitialData(studentData, roleList);
-        while (true) {
-            LinkedHashMap<String, List> handledData = Utils.transformData(Objects.requireNonNull(Utils.handleDataFromFile(studentData)));
-            StudentRegistration.register(handledData, studentData);
-        }
+        List<Semester> semesterList = Utils.createListSemester();
+        Utils.addInitialData(studentData, roleList, semesterList);
+        LinkedHashMap<String, List> handledData = Utils.transformData(Objects.requireNonNull(Utils.handleDataFromFile(studentData)));
+        StudentRegistration.register(handledData, studentData);
     }
 }
