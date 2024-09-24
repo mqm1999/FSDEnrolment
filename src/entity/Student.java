@@ -3,16 +3,14 @@ package entity;
 public class Student {
     private String studentId;
     private String email;
-    private String phone;
-    private Long userId;
+    private String userId;
 
     public Student() {
     }
 
-    public Student(String studentId, String email, String phone, Long userId) {
+    public Student(String studentId, String email, String userId) {
         this.studentId = studentId;
         this.email = email;
-        this.phone = phone;
         this.userId = userId;
     }
 
@@ -32,19 +30,11 @@ public class Student {
         this.email = email;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 }
