@@ -225,5 +225,4 @@ public class Utils {
         return semesterList;
     }
 
-    public static List<>
 }
