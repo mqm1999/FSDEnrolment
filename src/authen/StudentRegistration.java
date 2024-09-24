@@ -10,7 +10,7 @@ import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Authentication {
+public class StudentRegistration {
 
     public static void register(LinkedHashMap<String, List> data, File studentData) {
         List<User> userList = data.get("user");
@@ -21,11 +21,11 @@ public class Authentication {
         String password = null;
         System.out.println("Email: ");
         String firstUsername = sc.nextLine();
-        if (!Utils.validateEmail(firstUsername) || !Authentication.validateEmailDuplication(firstUsername, userList)) {
+        if (!Utils.validateEmail(firstUsername) || !StudentRegistration.validateEmailDuplication(firstUsername, userList)) {
             while (!usernameFlag) {
                 System.out.println("Invalid email. Enter new email: ");
                 username = sc.nextLine();
-                usernameFlag = Utils.validateEmail(username) && Authentication.validateEmailDuplication(username, userList);
+                usernameFlag = Utils.validateEmail(username) && StudentRegistration.validateEmailDuplication(username, userList);
 
             }
         } else {
@@ -67,10 +67,10 @@ public class Authentication {
         boolean studentIdFlag = true;
         DecimalFormat df = new DecimalFormat("000000");
         long genId = (long) (Math.random() * 1000000 - 1);
-        if (Authentication.checkStudentId(studentIdList, genId, df)) {
+        if (StudentRegistration.checkStudentId(studentIdList, genId, df)) {
             while (studentIdFlag) {
                 genId = (long) (Math.random() * 1000000 - 1);
-                studentIdFlag = Authentication.checkStudentId(studentIdList, genId, df);
+                studentIdFlag = StudentRegistration.checkStudentId(studentIdList, genId, df);
             }
         }
         Student student = new Student();

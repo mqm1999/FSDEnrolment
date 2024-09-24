@@ -1,4 +1,4 @@
-import authen.Authentication;
+import authen.StudentRegistration;
 import entity.Role;
 import util.Utils;
 
@@ -14,7 +14,7 @@ public class Main {
         Utils.addInitialData(studentData, roleList);
         while (true) {
             LinkedHashMap<String, List> handledData = Utils.transformData(Objects.requireNonNull(Utils.handleDataFromFile(studentData)));
-            Authentication.register(handledData, studentData);
+            StudentRegistration.register(handledData, studentData);
         }
     }
 }
