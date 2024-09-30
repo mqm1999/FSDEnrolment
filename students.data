@@ -1,9 +1,8 @@
 [{"id":1,"roleName":"student"},{"id":2,"roleName":"admin"}]
-[{"id":"d16eb70e-212e-45c1-bc54-546f1a240a7d","roleId":1,"username":"mai@university.com","password":"A1234"},{"id":"043862e1-8d7d-4a6b-a778-e8260bcfa48e","roleId":1,"username":"minh@university.com","password":"A1234"}]
-[]
-[{"studentId":"859988","email":"mai@university.com","userId":"d16eb70e-212e-45c1-bc54-546f1a240a7d"},{"studentId":"309900","email":"minh@university.com","userId":"043862e1-8d7d-4a6b-a778-e8260bcfa48e"}]
-[]
-[]
-[]
-[]
-[]
+[{"id":"e29c84a8-bb77-4f1a-ba78-1f8437db1483","roleId":1,"username":"mai@university.com","password":"A1234"}]
+
+[{"studentId":"294333","email":"mai@university.com","userId":"e29c84a8-bb77-4f1a-ba78-1f8437db1483"}]
+
+[{"subjectId":"508","subjectName":"Fundamentals of Software Development"},{"subjectId":"405","subjectName":"Database"},{"subjectId":"900","subjectName":"Enabling Enterprise Information Systems"},{"subjectId":"769","subjectName":"Unix Systems Programming"},{"subjectId":"553","subjectName":"LANS and Routing"},{"subjectId":"787","subjectName":"Project Management"}]
+
+[{"id":"f1237018-8477-4157-b045-07183c7736ee","subjectId":"405","studentId":"294333","enrollTime":"2024-10-01T02:00:46.861441","subjectMark":33,"subjectGrade":"Z"},{"id":"0b8086ff-834e-40a2-b097-df484518a9eb","subjectId":"553","studentId":"294333","enrollTime":"2024-10-01T02:00:47.379298","subjectMark":44,"subjectGrade":"Z"},{"id":"d146697d-7aed-4925-948d-490bbbc1db89","subjectId":"900","studentId":"294333","enrollTime":"2024-10-01T02:00:47.724979","subjectMark":63,"subjectGrade":"P"}]

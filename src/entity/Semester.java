@@ -3,7 +3,6 @@ package entity;
 public class Semester {
     private String id;
     private String semesterName;
-
     private boolean active;
 
     public Semester(String id, String semesterName, boolean active) {

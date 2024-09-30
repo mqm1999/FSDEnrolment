@@ -3,6 +3,7 @@ package util;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import constant.Constants;
+import dto.StudentLoginInfo;
 import entity.Admin;
 import entity.Course;
 import entity.CourseEnrolment;
@@ -12,6 +13,7 @@ import entity.Student;
 import entity.Subject;
 import entity.SubjectEnrolment;
 import entity.User;
+import service.StudentSession;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,8 +27,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
+import java.util.Scanner;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Utils {
     public static boolean validateEmail(String email) {
@@ -41,8 +44,7 @@ public class Utils {
         File studentData = new File("./students.data");
         try {
             if (studentData.createNewFile()) {
-                System.out.println("File created: "
-                        + studentData.getName());
+                System.out.println("File created: " + studentData.getName());
             } else {
                 System.out.println("File already exists.");
             }
@@ -52,7 +54,7 @@ public class Utils {
         }
     }
 
-    public static void addInitialData(File file, List<Role> roleList, List<Semester> semesterList) {
+    public static void addInitialData(File file, List<Role> roleList, List<Subject> subjectList) {
         /*
          * file format:
          * - role
@@ -68,10 +70,10 @@ public class Utils {
         StringBuilder stringBuilder = new StringBuilder();
         try {
             FileWriter fw = new FileWriter(file.getPath());
-            stringBuilder.append(new Gson().toJson(roleList));
-            stringBuilder.append("\n".repeat(3));
-            stringBuilder.append(new Gson().toJson(semesterList));
+            stringBuilder.append(new Gson().toJson(roleList)).append("\n");
             stringBuilder.append("\n".repeat(4));
+            stringBuilder.append(new Gson().toJson(subjectList));
+            stringBuilder.append("\n".repeat(3));
             fw.write(stringBuilder.toString());
             fw.close();
             System.out.println("Finish creating roles");
@@ -191,20 +193,6 @@ public class Utils {
         return result;
     }
 
-    public static void writeFile(LinkedHashMap<String, List> map, File file) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Map.Entry<String, List> it : map.entrySet()) {
-            stringBuilder.append(new Gson().toJson(it.getValue())).append("\n");
-        }
-        try {
-            FileWriter fw = new FileWriter(file.getPath());
-            fw.write(stringBuilder.toString());
-            fw.close();
-        } catch (IOException e) {
-            System.out.println("Error writing file");
-        }
-    }
-
     public static List<Role> createListRole() {
         Role student = new Role(1L, "student");
         Role admin = new Role(2L, "admin");
@@ -214,15 +202,79 @@ public class Utils {
         return roleList;
     }
 
-    public static List<Semester> createListSemester() {
-        List<Semester> semesterList = new ArrayList<>();
-        Semester spring2024 = new Semester(UUID.randomUUID().toString(), "Spring 2024", true);
-        Semester autumn2024 = new Semester(UUID.randomUUID().toString(), "Autumn 2024", false);
-        Semester autumn2025 = new Semester(UUID.randomUUID().toString(), "Autumn 2025", false);
-        semesterList.add(spring2024);
-        semesterList.add(autumn2024);
-        semesterList.add(autumn2025);
-        return semesterList;
+//    public static List<Semester> createListSemester() {
+//        List<Semester> semesterList = new ArrayList<>();
+//        Semester spring2024 = new Semester(UUID.randomUUID().toString(), "Spring 2024", true);
+//        Semester autumn2024 = new Semester(UUID.randomUUID().toString(), "Autumn 2024", false);
+//        Semester autumn2025 = new Semester(UUID.randomUUID().toString(), "Autumn 2025", false);
+//        semesterList.add(spring2024);
+//        semesterList.add(autumn2024);
+//        semesterList.add(autumn2025);
+//        return semesterList;
+//    }
+
+    public static List<Subject> createListSubject() {
+        List<Subject> subjectList = new ArrayList<>();
+        Subject fsd = new Subject(createSubjectId(subjectList), "Fundamentals of Software Development");
+        subjectList.add(fsd);
+        Subject database = new Subject(createSubjectId(subjectList), "Database");
+        subjectList.add(database);
+        Subject eeis = new Subject(createSubjectId(subjectList), "Enabling Enterprise Information Systems");
+        subjectList.add(eeis);
+        Subject unix = new Subject(createSubjectId(subjectList), "Unix Systems Programming");
+        subjectList.add(unix);
+        Subject lans = new Subject(createSubjectId(subjectList), "LANS and Routing");
+        subjectList.add(lans);
+        Subject projectManagement = new Subject(createSubjectId(subjectList), "Project Management");
+        subjectList.add(projectManagement);
+        return subjectList;
     }
 
+    public static String createSubjectId(List<Subject> subjectList) {
+        String id = null;
+        boolean flag = true;
+        List<String> subjectIdList = subjectList.stream().map(Subject::getSubjectId).collect(Collectors.toList());
+        while (flag) {
+            String genId = generateSubjectId();
+            if (!subjectIdList.contains(genId)) {
+                id = genId;
+                flag = false;
+            }
+        }
+        return id;
+    }
+
+    public static String generateSubjectId() {
+        return String.valueOf((int) ((Math.random() * 999) + 1));
+    }
+
+    public static void sessionStudentDetail(StudentLoginInfo student, LinkedHashMap<String, List> handledData, File studentData) {
+        Scanner sc = new Scanner(System.in);
+        if (Objects.equals(student, null)) {
+            return;
+        } else {
+            System.out.println("-----------------The subject enrolment system-----------------");
+            System.out.println("Please select an option");
+            System.out.println("(e) Enrol");
+            System.out.println("(r) Remove a subject from enrolment list");
+            System.out.println("(s) Show current enrolled subjects");
+            System.out.println("(c) Change password");
+            System.out.println("(x) Quit");
+            String option = sc.nextLine();
+            switch (option.toLowerCase()) {
+                case "e":
+                    StudentSession.enroll(handledData, studentData, student);
+                    break;
+                case "r":
+                    StudentSession.remove(handledData, studentData, student);
+                    break;
+                case "s":
+                    StudentSession.view(handledData, studentData, student);
+                    break;
+                case "c":
+                case "x":
+                default:
+            }
+        }
+    }
 }
