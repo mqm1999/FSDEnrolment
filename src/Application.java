@@ -72,6 +72,7 @@ public class Application {
                 Authentication.register(handledData, studentData);
                 break;
             case "x":
+                System.out.println("Quit student session");
                 break;
             default:
                 break;
