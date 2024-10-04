@@ -13,6 +13,7 @@ import entity.Student;
 import entity.Subject;
 import entity.SubjectEnrolment;
 import entity.User;
+import service.Authentication;
 import service.StudentSession;
 
 import java.io.BufferedReader;
@@ -123,8 +124,6 @@ public class Utils {
                     break;
                 case "admin":
                     Type adminListType = new TypeToken<List<Admin>>() {
-                    }.getType();
-                    Type adminType = new TypeToken<List<Admin>>() {
                     }.getType();
                     List<Admin> adminList = new Gson().fromJson(value.getValue(), adminListType);
                     if (Objects.equals(adminList, null)) {
@@ -272,7 +271,11 @@ public class Utils {
                     StudentSession.view(handledData, studentData, student);
                     break;
                 case "c":
+                    Authentication.changePassword(handledData, studentData, student);
+                    break;
                 case "x":
+                    System.out.println("Quit");
+                    break;
                 default:
             }
         }

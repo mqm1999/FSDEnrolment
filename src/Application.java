@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class Main {
+public class Application {
     public static void main(String[] args) {
         boolean state = true;
         File studentData = Utils.createFile();
@@ -55,7 +55,7 @@ public class Main {
     private static void sessionAdmin(LinkedHashMap<String, List> handledData, File studentData) {
     }
 
-    private static void sessionStudent(LinkedHashMap<String, List> handledData, File studentData) {
+    public static void sessionStudent(LinkedHashMap<String, List> handledData, File studentData) {
         Scanner sc = new Scanner(System.in);
         System.out.println("-----------------The student system-----------------");
         System.out.println("Select an option: ");
