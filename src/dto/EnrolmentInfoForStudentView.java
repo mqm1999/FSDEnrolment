@@ -1,15 +1,15 @@
 package dto;
 
-public class EnrolmentInfoForView {
+public class EnrolmentInfoForStudentView {
     private String subjectName;
     private String enrollTime;
     private Long subjectMark;
     private String subjectGrade;
 
-    public EnrolmentInfoForView() {
+    public EnrolmentInfoForStudentView() {
     }
 
-    public EnrolmentInfoForView(String subjectName, String enrollTime, Long subjectMark, String subjectGrade) {
+    public EnrolmentInfoForStudentView(String subjectName, String enrollTime, Long subjectMark, String subjectGrade) {
         this.subjectName = subjectName;
         this.enrollTime = enrollTime;
         this.subjectMark = subjectMark;

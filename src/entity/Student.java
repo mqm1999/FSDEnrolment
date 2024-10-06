@@ -2,16 +2,26 @@ package entity;
 
 public class Student {
     private String studentId;
+    private String studentName;
     private String email;
     private String userId;
 
     public Student() {
     }
 
-    public Student(String studentId, String email, String userId) {
+    public Student(String studentId, String studentName, String email, String userId) {
         this.studentId = studentId;
+        this.studentName = studentName;
         this.email = email;
         this.userId = userId;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
     }
 
     public String getStudentId() {

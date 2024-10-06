@@ -3,7 +3,6 @@ package util;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import constant.Constants;
-import dto.StudentLoginInfo;
 import entity.Admin;
 import entity.Course;
 import entity.CourseEnrolment;
@@ -13,8 +12,6 @@ import entity.Student;
 import entity.Subject;
 import entity.SubjectEnrolment;
 import entity.User;
-import service.Authentication;
-import service.StudentSession;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,17 +25,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class Utils {
+public class StudentUtils {
     public static boolean validateEmail(String email) {
-        return Pattern.matches(".*@university\\.com$", email);
+        return !Pattern.matches(".*@university\\.com$", email);
     }
 
     public static boolean validatePassword(String password) {
-        return password.length() >= 5 && Pattern.matches("^[A-Z]\\d{3,}.*", password);
+        return password.length() < 5 || !Pattern.matches("^[A-Z]\\d{3,}.*", password);
     }
 
     public static File createFile() {
@@ -201,17 +197,6 @@ public class Utils {
         return roleList;
     }
 
-//    public static List<Semester> createListSemester() {
-//        List<Semester> semesterList = new ArrayList<>();
-//        Semester spring2024 = new Semester(UUID.randomUUID().toString(), "Spring 2024", true);
-//        Semester autumn2024 = new Semester(UUID.randomUUID().toString(), "Autumn 2024", false);
-//        Semester autumn2025 = new Semester(UUID.randomUUID().toString(), "Autumn 2025", false);
-//        semesterList.add(spring2024);
-//        semesterList.add(autumn2024);
-//        semesterList.add(autumn2025);
-//        return semesterList;
-//    }
-
     public static List<Subject> createListSubject() {
         List<Subject> subjectList = new ArrayList<>();
         Subject fsd = new Subject(createSubjectId(subjectList), "Fundamentals of Software Development");
@@ -245,39 +230,5 @@ public class Utils {
 
     public static String generateSubjectId() {
         return String.valueOf((int) ((Math.random() * 999) + 1));
-    }
-
-    public static void sessionStudentDetail(StudentLoginInfo student, LinkedHashMap<String, List> handledData, File studentData) {
-        Scanner sc = new Scanner(System.in);
-        if (Objects.equals(student, null)) {
-            return;
-        } else {
-            System.out.println("-----------------The subject enrolment system-----------------");
-            System.out.println("Please select an option");
-            System.out.println("(e) Enrol");
-            System.out.println("(r) Remove a subject from enrolment list");
-            System.out.println("(s) Show current enrolled subjects");
-            System.out.println("(c) Change password");
-            System.out.println("(x) Quit");
-            String option = sc.nextLine();
-            switch (option.toLowerCase()) {
-                case "e":
-                    StudentSession.enroll(handledData, studentData, student);
-                    break;
-                case "r":
-                    StudentSession.remove(handledData, studentData, student);
-                    break;
-                case "s":
-                    StudentSession.view(handledData, studentData, student);
-                    break;
-                case "c":
-                    Authentication.changePassword(handledData, studentData, student);
-                    break;
-                case "x":
-                    System.out.println("Quit");
-                    break;
-                default:
-            }
-        }
     }
 }

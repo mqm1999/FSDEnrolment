@@ -1,8 +1,10 @@
+import controller.AdminController;
+import controller.StudentController;
 import dto.StudentLoginInfo;
 import entity.Role;
 import entity.Subject;
-import service.Authentication;
-import util.Utils;
+import service.AuthenticationService;
+import util.StudentUtils;
 
 import java.io.File;
 import java.util.InputMismatchException;
@@ -14,12 +16,11 @@ import java.util.Scanner;
 public class Application {
     public static void main(String[] args) {
         boolean state = true;
-        File studentData = Utils.createFile();
-        List<Role> roleList = Utils.createListRole();
-//        List<Semester> semesterList = Utils.createListSemester();
-        List<Subject> subjectList = Utils.createListSubject();
-        Utils.addInitialData(studentData, roleList, subjectList);
-        LinkedHashMap<String, List> handledData = Utils.transformData(Objects.requireNonNull(Utils.handleDataFromFile(studentData)));
+        File studentData = StudentUtils.createFile();
+        List<Role> roleList = StudentUtils.createListRole();
+        List<Subject> subjectList = StudentUtils.createListSubject();
+        StudentUtils.addInitialData(studentData, roleList, subjectList);
+        LinkedHashMap<String, List> handledData = StudentUtils.transformData(Objects.requireNonNull(StudentUtils.handleDataFromFile(studentData)));
         while (state) {
             state = startSystem(handledData, studentData);
         }
@@ -54,6 +55,7 @@ public class Application {
     }
 
     private static void sessionAdmin(LinkedHashMap<String, List> handledData, File studentData) {
+        AdminController.sessionAdminDetail(handledData, studentData);
     }
 
     public static void sessionStudent(LinkedHashMap<String, List> handledData, File studentData) {
@@ -66,16 +68,17 @@ public class Application {
         String option = sc.nextLine();
         switch (option.toLowerCase()) {
             case "l":
-                StudentLoginInfo student = Authentication.studentLogin(handledData);
-                Utils.sessionStudentDetail(student, handledData, studentData);
+                StudentLoginInfo student = AuthenticationService.studentLogin(handledData);
+                StudentController.sessionStudentDetail(student, handledData, studentData);
                 break;
             case "r":
-                Authentication.register(handledData, studentData);
+                AuthenticationService.register(handledData, studentData);
                 break;
             case "x":
                 System.out.println("Quit student session");
                 break;
             default:
+                System.out.println("Not an option");
                 break;
         }
     }

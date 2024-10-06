@@ -2,12 +2,13 @@ package service;
 
 import com.google.gson.Gson;
 import constant.Constants;
+import controller.StudentController;
 import dto.StudentLoginInfo;
 import entity.Role;
 import entity.Student;
 import entity.User;
 import util.SecurityUtils;
-import util.Utils;
+import util.StudentUtils;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -23,7 +24,7 @@ import java.util.Scanner;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class Authentication {
+public class AuthenticationService {
 
     public static void register(LinkedHashMap<String, List> data, File studentData) {
         List<User> userList = data.get("user");
@@ -32,23 +33,25 @@ public class Authentication {
         int usernameCount = Constants.RETRY;
         String username = null;
         String password = null;
+        System.out.println("Your name: ");
+        String studentName = sc.nextLine();
         System.out.println("Email, type -1 to quit creating new user: ");
         String firstUsername = sc.nextLine();
         if (Objects.equals(firstUsername, "-1")) {
             return;
         }
-        if (!Utils.validateEmail(firstUsername) || !Authentication.validateEmailDuplication(firstUsername, userList)) {
+        if (StudentUtils.validateEmail(firstUsername) || AuthenticationService.validateEmailDuplication(firstUsername, userList)) {
             while (usernameCount > 0) {
-                if (!Authentication.validateEmailDuplication(firstUsername, userList)) {
+                if (AuthenticationService.validateEmailDuplication(firstUsername, userList)) {
                     System.out.println("Email has been registered. Enter a new email, type -1 to quit creating new user: ");
-                } else if (!Utils.validateEmail(firstUsername)) {
+                } else if (StudentUtils.validateEmail(firstUsername)) {
                     System.out.println("Invalid email. Enter a new email, type -1 to quit creating new user: ");
                 }
                 String retryUsername = sc.nextLine().trim();
                 if (Objects.equals("-1", retryUsername)) {
                     return;
                 } else {
-                    if (!Utils.validateEmail(firstUsername) || !Authentication.validateEmailDuplication(firstUsername, userList)) {
+                    if (StudentUtils.validateEmail(firstUsername) || AuthenticationService.validateEmailDuplication(firstUsername, userList)) {
                         if (usernameCount == 1) {
                             System.out.println("Please retry later");
                             return;
@@ -70,14 +73,14 @@ public class Authentication {
         if (Objects.equals(firstPassword, "-1")) {
             return;
         }
-        if (!Utils.validatePassword(firstPassword)) {
+        if (StudentUtils.validatePassword(firstPassword)) {
             while (passwordCount > 0) {
                 System.out.println("Invalid password. Enter a new password, type -1 to quit creating new user: ");
                 String retryPassword = sc.nextLine();
                 if (Objects.equals("-1", retryPassword)) {
                     return;
                 } else {
-                    if (!Utils.validatePassword(retryPassword)) {
+                    if (StudentUtils.validatePassword(retryPassword)) {
                         if (passwordCount == 1) {
                             System.out.println("Please retry later");
                             return;
@@ -117,13 +120,14 @@ public class Authentication {
         boolean studentIdFlag = true;
         DecimalFormat df = new DecimalFormat("000000");
         long genId = (long) ((Math.random() * 999999) + 1);
-        if (Authentication.checkStudentId(studentIdList, genId, df)) {
+        if (AuthenticationService.checkStudentId(studentIdList, genId, df)) {
             while (studentIdFlag) {
                 genId = (long) ((Math.random() * 999999) + 1);
-                studentIdFlag = Authentication.checkStudentId(studentIdList, genId, df);
+                studentIdFlag = AuthenticationService.checkStudentId(studentIdList, genId, df);
             }
         }
         Student student = new Student();
+        student.setStudentName(studentName);
         student.setUserId(user.getId());
         student.setStudentId(df.format(genId));
         student.setEmail(user.getUsername());
@@ -164,28 +168,25 @@ public class Authentication {
             if (enterOldPassword(userMap.get(student.getEmail()), count)) {
                 System.out.println("Enter new password: ");
                 String newPassword = sc.nextLine();
-                if (!Utils.validatePassword(newPassword)) {
+                if (StudentUtils.validatePassword(newPassword)) {
                     handleUpdatePassword(count, student, userInfoMap, studentData);
-                    Utils.sessionStudentDetail(student, handledData, studentData);
+                    StudentController.sessionStudentDetail(student, handledData, studentData);
                 } else {
                     updateNewPassword(userInfoMap, studentData, student, newPassword);
                 }
             } else {
-                Utils.sessionStudentDetail(student, handledData, studentData);
+                StudentController.sessionStudentDetail(student, handledData, studentData);
             }
         } else {
             System.out.println("Enter new password: ");
             String newPassword = sc.nextLine();
-            if (!Utils.validatePassword(newPassword)) {
+            if (StudentUtils.validatePassword(newPassword)) {
                 handleUpdatePassword(count, student, userInfoMap, studentData);
-                Utils.sessionStudentDetail(student, handledData, studentData);
+                StudentController.sessionStudentDetail(student, handledData, studentData);
             } else {
                 updateNewPassword(userInfoMap, studentData, student, newPassword);
             }
         }
-    }
-
-    public static void adminLogin(LinkedHashMap<String, List> handledData, File studentData) {
     }
     // -------------------------- PRIVATE METHOD --------------------------
 
@@ -221,7 +222,7 @@ public class Authentication {
     }
 
     private static boolean validateEmailDuplication(String username, List<User> userList) {
-        return !userList.stream().map(User::getUsername).collect(Collectors.toList()).contains(username);
+        return userList.stream().map(User::getUsername).collect(Collectors.toList()).contains(username);
     }
 
     private static boolean checkStudentId(List<String> studentIdList, Long genId, DecimalFormat df) {
@@ -254,7 +255,7 @@ public class Authentication {
             if (Objects.equals(password, "-1")) {
                 count = 0;
             } else {
-                if (!Utils.validatePassword(password)) {
+                if (StudentUtils.validatePassword(password)) {
                     if (count == 1) {
                         System.out.println("Please retry later");
                         count = 0;
