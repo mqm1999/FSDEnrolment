@@ -21,11 +21,11 @@ public class Application {
         Utils.addInitialData(studentData, roleList, subjectList);
         LinkedHashMap<String, List> handledData = Utils.transformData(Objects.requireNonNull(Utils.handleDataFromFile(studentData)));
         while (state) {
-            startSystem(handledData, studentData);
+            state = startSystem(handledData, studentData);
         }
     }
 
-    private static void startSystem(LinkedHashMap<String, List> handledData, File studentData) {
+    private static boolean startSystem(LinkedHashMap<String, List> handledData, File studentData) {
         try {
             Scanner sc = new Scanner(System.in);
             System.out.println("Welcome to self-enroll system");
@@ -43,13 +43,14 @@ public class Application {
                     break;
                 case "x":
                     System.out.println("Quit");
-                    break;
+                    return false;
                 default:
                     break;
             }
         } catch (InputMismatchException inputMismatchException) {
             System.out.println("Invalid input");
         }
+        return true;
     }
 
     private static void sessionAdmin(LinkedHashMap<String, List> handledData, File studentData) {

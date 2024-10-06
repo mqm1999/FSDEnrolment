@@ -28,42 +28,65 @@ public class Authentication {
     public static void register(LinkedHashMap<String, List> data, File studentData) {
         List<User> userList = data.get("user");
         Scanner sc = new Scanner(System.in);
-        boolean usernameFlag = false;
-        int count = Constants.RETRY;
+        int passwordCount = Constants.RETRY;
+        int usernameCount = Constants.RETRY;
         String username = null;
         String password = null;
-        System.out.println("Email: ");
+        System.out.println("Email, type -1 to quit creating new user: ");
         String firstUsername = sc.nextLine();
+        if (Objects.equals(firstUsername, "-1")) {
+            return;
+        }
         if (!Utils.validateEmail(firstUsername) || !Authentication.validateEmailDuplication(firstUsername, userList)) {
-            while (!usernameFlag) {
-                System.out.println("Invalid email. Enter new email: ");
-                username = sc.nextLine().trim();
-                usernameFlag = Utils.validateEmail(username) && Authentication.validateEmailDuplication(username, userList);
-
+            while (usernameCount > 0) {
+                if (!Authentication.validateEmailDuplication(firstUsername, userList)) {
+                    System.out.println("Email has been registered. Enter a new email, type -1 to quit creating new user: ");
+                } else if (!Utils.validateEmail(firstUsername)) {
+                    System.out.println("Invalid email. Enter a new email, type -1 to quit creating new user: ");
+                }
+                String retryUsername = sc.nextLine().trim();
+                if (Objects.equals("-1", retryUsername)) {
+                    return;
+                } else {
+                    if (!Utils.validateEmail(firstUsername) || !Authentication.validateEmailDuplication(firstUsername, userList)) {
+                        if (usernameCount == 1) {
+                            System.out.println("Please retry later");
+                            return;
+                        } else {
+                            usernameCount--;
+                        }
+                    } else {
+                        username = retryUsername;
+                        usernameCount = 0;
+                    }
+                }
             }
         } else {
             username = firstUsername;
         }
         // TODO: find way to mask the echo password
-        System.out.println("Password: ");
+        System.out.println("Password, type -1 to quit creating new user: ");
         String firstPassword = sc.nextLine();
+        if (Objects.equals(firstPassword, "-1")) {
+            return;
+        }
         if (!Utils.validatePassword(firstPassword)) {
-            while (count > 0) {
-                System.out.println("Invalid password. Enter new password, type -1 to quit creating new user: ");
+            while (passwordCount > 0) {
+                System.out.println("Invalid password. Enter a new password, type -1 to quit creating new user: ");
                 String retryPassword = sc.nextLine();
-                if (Objects.equals("-1", password)) {
-                    count = 0;
+                if (Objects.equals("-1", retryPassword)) {
+                    return;
                 } else {
                     if (!Utils.validatePassword(retryPassword)) {
-                        if (count == 1) {
+                        if (passwordCount == 1) {
                             System.out.println("Please retry later");
                             return;
                         } else {
-                            count--;
+                            passwordCount--;
                         }
                     } else {
                         password = retryPassword;
-                        count = 0;
+                        passwordCount = 0;
                     }
                 }
             }
@@ -82,7 +105,7 @@ public class Authentication {
         User user = new User();
         user.setId(UUID.randomUUID().toString());
         user.setUsername(username);
-        user.setPassword(SecurityUtils.hashPassword(password));
+        user.setPassword(SecurityUtils.hashPassword(Objects.requireNonNull(password)));
         user.setRoleId(roleId);
 
         // get user list to add
@@ -168,10 +191,16 @@ public class Authentication {
 
     private static StudentLoginInfo handleLogin(Map<String, String> userMap, Map<String, Student> studentMap) {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Username: ");
+        System.out.println("Username, type -1 to stop logging in: ");
         String firstUsername = sc.nextLine();
-        System.out.println("Password: ");
+        if (Objects.equals(firstUsername, "-1")) {
+            return null;
+        }
+        System.out.println("Password, type -1 to stop logging in: ");
         String firstPassword = sc.nextLine();
+        if (Objects.equals(firstPassword, "-1")) {
+            return null;
+        }
         return checkLoginInfo(userMap, studentMap, firstPassword, firstUsername);
 
     }
