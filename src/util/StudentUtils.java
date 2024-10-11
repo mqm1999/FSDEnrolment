@@ -34,7 +34,7 @@ public class StudentUtils {
     }
 
     public static boolean validatePassword(String password) {
-        return password.length() < 5 || !Pattern.matches("^[A-Z]\\d{3,}.*", password);
+        return password.length() < 5 || !Pattern.matches("^[A-Z].*\\d{3,}.*", password);
     }
 
     public static File createFile() {
