@@ -51,7 +51,7 @@ public class AuthenticationService {
                 if (Objects.equals("-1", retryUsername)) {
                     return;
                 } else {
-                    if (StudentUtils.validateEmail(firstUsername) || AuthenticationService.validateEmailDuplication(firstUsername, userList)) {
+                    if (StudentUtils.validateEmail(retryUsername) || AuthenticationService.validateEmailDuplication(retryUsername, userList)) {
                         if (usernameCount == 1) {
                             System.out.println("Please retry later");
                             return;
