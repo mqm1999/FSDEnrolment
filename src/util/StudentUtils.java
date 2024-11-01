@@ -63,7 +63,7 @@ public class StudentUtils {
          * - course
          * - subject enrolment
          * - course enrolment
-         * */
+         */
         StringBuilder stringBuilder = new StringBuilder();
         try {
             FileWriter fw = new FileWriter(file.getPath());

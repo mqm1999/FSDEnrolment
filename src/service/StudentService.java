@@ -141,24 +141,29 @@ public class StudentService {
         boolean flag = true;
         while (flag) {
             System.out.println("Enrolled subjects: ");
-            for (SubjectEnrolment subjectEnrolment : subjectEnrolmentSet) {
-                System.out.println(subjectEnrolment.getSubjectId() + ": " + subjectMap.get(subjectEnrolment.getSubjectId()));
-            }
-            System.out.println("Select a subject id to remove, type -1 to quit: ");
-            String id = sc.nextLine();
-            if (Objects.equals(id, "-1")) {
-                System.out.println("Quit removing");
+            if (subjectEnrolmentSet.isEmpty()) {
+                System.out.println("No more subjects in the list");
                 flag = false;
-            }
-            // case: no subject with that id / no id in enrolled list
-            else if (!subjectMap.containsKey(id) || !enrolledIdSet.contains(id)) {
-                System.out.println("Subject is unavailable to delete");
-            }
-            // remove the selected
-            else if (subjectMap.containsKey(id) && enrolledIdSet.contains(id)) {
-                subjectEnrolmentSet.removeIf(enrolment -> Objects.equals(enrolment.getSubjectId(), id));
-                subjectEnrolmentList.removeIf(enrolment -> Objects.equals(id, enrolment.getSubjectId()) && Objects.equals(student.getStudentId(), enrolment.getStudentId()));
-                updateLatestSubjectEnrolment(studentData, subjectEnrolmentList);
+            } else {
+                for (SubjectEnrolment subjectEnrolment : subjectEnrolmentSet) {
+                    System.out.println(subjectEnrolment.getSubjectId() + ": " + subjectMap.get(subjectEnrolment.getSubjectId()));
+                }
+                System.out.println("Select a subject id to remove, type -1 to quit: ");
+                String id = sc.nextLine();
+                if (Objects.equals(id, "-1")) {
+                    System.out.println("Quit removing");
+                    flag = false;
+                }
+                // case: no subject with that id / no id in enrolled list
+                else if (!subjectMap.containsKey(id) || !enrolledIdSet.contains(id)) {
+                    System.out.println("Subject is unavailable to delete");
+                }
+                // remove the selected
+                else if (subjectMap.containsKey(id) && enrolledIdSet.contains(id)) {
+                    subjectEnrolmentSet.removeIf(enrolment -> Objects.equals(enrolment.getSubjectId(), id));
+                    subjectEnrolmentList.removeIf(enrolment -> Objects.equals(id, enrolment.getSubjectId()) && Objects.equals(student.getStudentId(), enrolment.getStudentId()));
+                    updateLatestSubjectEnrolment(studentData, subjectEnrolmentList);
+                }
             }
         }
         return subjectEnrolmentList;

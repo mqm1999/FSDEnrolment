@@ -1,8 +1,8 @@
+[{"id":1,"roleName":"student"},{"id":2,"roleName":"admin"}]
+[{"id":"32e4e1a5-afed-48b1-a174-1b4dc61377ed","roleId":1,"username":"minh@university.com","password":"$2a$10$uJMznWzU06aXBzVBi560SOnZrf9KylN5IdKefRQLIUf/yEkUPusoK"}]
 
+[{"studentId":"038284","studentName":"minh","email":"minh@university.com","userId":"32e4e1a5-afed-48b1-a174-1b4dc61377ed"}]
 
+[{"subjectId":"567","subjectName":"Fundamentals of Software Development"},{"subjectId":"767","subjectName":"Database"},{"subjectId":"145","subjectName":"Enabling Enterprise Information Systems"},{"subjectId":"17","subjectName":"Unix Systems Programming"},{"subjectId":"217","subjectName":"LANS and Routing"},{"subjectId":"218","subjectName":"Project Management"}]
 
-
-
-
-
-
+[]
