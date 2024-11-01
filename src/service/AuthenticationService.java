@@ -182,7 +182,7 @@ public class AuthenticationService {
             String newPassword = sc.nextLine();
             if (StudentUtils.validatePassword(newPassword)) {
                 handleUpdatePassword(count, student, userInfoMap, studentData);
-                StudentController.sessionStudentDetail(student, handledData, studentData);
+//                StudentController.sessionStudentDetail(student, handledData, studentData);
             } else {
                 updateNewPassword(userInfoMap, studentData, student, newPassword);
             }

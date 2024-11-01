@@ -37,7 +37,7 @@ public class AdminService {
                         .map(line -> "")
                         .collect(Collectors.toList());
                 Files.write(Paths.get(studentData.getPath()), blankLines);
-                System.out.println("All lines in the file replaced with blank lines successfully.");
+                System.out.println("Database deleted.");
             } catch (IOException e) {
                 System.out.println("There is a problem with the file");
             }
